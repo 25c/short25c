@@ -1,0 +1,13 @@
+{
+  "name" : "short25c",
+  "version" : "0.0.1",
+  "dependencies" : {
+    "connect" : "1.x",
+    "ejs" : "0.4.x",
+    "express" : "2.5.x",
+    "redis" : "0.7.x",
+    "connect-redis" : "1.x",
+    "connect-assetmanager" : "0.0.x",
+    "connect-assetmanager-handlers" : "0.0.x"
+  }
+}
