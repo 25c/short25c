@@ -14,7 +14,7 @@ var uuid = require('node-uuid');
 var redis = require('redis');
 var redisWebClient = redis.createClient(config['redis-web'].port, config['redis-web'].host);
 if (config['redis-web'].pass) {
-  redisWebClient.auth(config.pass);
+  redisWebClient.auth(config['redis-web'].pass);
 }
 
 
