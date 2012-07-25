@@ -3,8 +3,10 @@ var config = require('./lib/get-config'),
     nus = require('./lib/nus'),
     connect = require('connect'),
     express = require('express'),
+/*    
     assetManager = require('connect-assetmanager'),
     assetHandler = require('connect-assetmanager-handlers'),
+*/    
     app = express.createServer(),
 	sys = require('util');
 
@@ -20,6 +22,7 @@ process.addListener('uncaughtException', function (err, stack) {
     console.log('\u0007'); // Terminal bell
 });
 
+/*
 // Session store
 var RedisStore = require('connect-redis')(express),
     sessionStore = new RedisStore(nus.getConfig());
@@ -64,7 +67,7 @@ var assetsSettings = {
 };
 
 var assetsMiddleware = assetManager(assetsSettings);
-
+*/
 // Settings
 app.configure(function () {
     app.set('view engine', 'ejs');
@@ -75,11 +78,13 @@ app.configure(function () {
 app.configure(function () {
     app.use(express.bodyParser());
     app.use(express.cookieParser());
+/*    
     app.use(assetsMiddleware);
     app.use(express.session({
         'store': sessionStore,
         'secret': config.sessionSecret
     }));
+*/    
     app.use(express.logger({
         format: ':response-time ms - :date - :req[x-real-ip] - :method :url :user-agent / :referrer'
     }));
@@ -96,6 +101,7 @@ app.configure('development', function () {
     }));
 });
 
+/*
 // Template helpers
 app.dynamicHelpers({
     'assetsCacheHashes': function (req, res) {
@@ -116,10 +122,11 @@ app.error(function (err, req, res, next) {
         res.render('errors/500');
     }
 });
+*/
 
 // Routing
 app.all('/', function (req, res) {
-    res.render('index');
+    res.redirect(config['url-web'], 301);
 });
 
 app.all('/api/v1/:link', function (req, res) {
@@ -235,7 +242,19 @@ app.all(/^\/(\w+)$/, function (req, res){
         if (err) {
             res.send(404);
         } else {
-            res.redirect(reply.long_url, 301);
+  					var temp_url_elements = reply.long_url.split('/');
+  					var temp_url = "";
+  					var i;
+
+  					for (i = 0; i < temp_url_elements.length - 2; i++)
+  						temp_url = temp_url + temp_url_elements[i] + '/';
+
+
+  					temp_url = temp_url.slice(0, -1);
+
+  					var referrer_id = temp_url_elements[temp_url_elements.length - 2];
+  					var provider_id = temp_url_elements[temp_url_elements.length - 1];
+            res.redirect(temp_url, 301);
         }
     }, true);
 });
