@@ -136,7 +136,7 @@ app.error(function (err, req, res, next) {
 app.all('/', function (req, res) {
     res.redirect(config['url-web'], 301);
 });
-
+/*
 app.all('/api/v1/:link', function (req, res) {
     var response = {},
         status_codes = {
@@ -244,7 +244,7 @@ app.all(/^\/(\w+)\+/, function (req, res){
         }
     });
 });
-
+*/
 app.all(/^\/(\w+)$/, function (req, res){
     nus.expand(req.params[0], function (err, reply) {
         if (err) {
