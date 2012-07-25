@@ -9,6 +9,7 @@
     "connect-redis" : "1.x",
     "connect-assetmanager" : "0.0.x",
     "connect-assetmanager-handlers" : "0.0.x",
-		"node-uuid": "latest"
+		"node-uuid": "latest",
+		"zlib": "1.0.5"
   }
 }
