@@ -8,6 +8,7 @@
     "redis" : "0.7.x",
     "connect-redis" : "1.x",
     "connect-assetmanager" : "0.0.x",
-    "connect-assetmanager-handlers" : "0.0.x"
+    "connect-assetmanager-handlers" : "0.0.x",
+		"node-uuid": "latest"
   }
 }

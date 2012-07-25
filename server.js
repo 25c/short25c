@@ -9,6 +9,14 @@ var config = require('./lib/get-config'),
 */    
     app = express.createServer(),
 	sys = require('util');
+	
+var uuid = require('node-uuid');
+var redis = require('redis');
+var redisApiClient = redis.createClient(config['redis-api'].port, config['redis-api'].host);
+if (config['redis-api'].pass) {
+  redisApiClient.auth(config.pass);
+}
+
 
 function NotFound(msg) {
     this.name = 'NotFound';
@@ -144,7 +152,7 @@ app.all('/api/v1/:link', function (req, res) {
 
     switch (req.params.link) {
     case 'shorten':
-        nus.shorten(req.param('long_url')+'/'+req.param("referrer_id")+'/'+req.param("provider_id"), function (err, reply) {
+        nus.shorten(req.param('long_url')+'/'+req.param("referrer_uuid")+'/'+req.param("provider_uuid"), function (err, reply) {
             if (err) {
                 response = {
                     'status_code' : (status_codes[err]) ? err : 503,
@@ -190,8 +198,8 @@ app.all('/api/v1/:link', function (req, res) {
 
 					temp_url = temp_url.slice(0, -1);
 
-					var referrer_id = temp_url_elements[temp_url_elements.length - 2];
-					var provider_id = temp_url_elements[temp_url_elements.length - 1];
+					var referrer_user_uuid = temp_url_elements[temp_url_elements.length - 2];
+					var provider_uuid = temp_url_elements[temp_url_elements.length - 1];
 					
 //					sys.puts(sys.inspect(referrer_id));
 //					sys.puts(sys.inspect(provider_id));
@@ -204,8 +212,8 @@ app.all('/api/v1/:link', function (req, res) {
                     'url'         : config.url + '/' + reply.hash,
                     'long_url'    : temp_url,
                     'clicks'      : reply.clicks,
-					'referrer_id' : referrer_id,
-					'provider_id' : provider_id
+					'referrer_user_uuid' : referrer_user_uuid,
+					'provider_uuid' : provider_uuid
 				};
             }
 
@@ -252,8 +260,29 @@ app.all(/^\/(\w+)$/, function (req, res){
 
   					temp_url = temp_url.slice(0, -1);
 
-  					var referrer_id = temp_url_elements[temp_url_elements.length - 2];
-  					var provider_id = temp_url_elements[temp_url_elements.length - 1];
+  					var referrer_user_uuid = temp_url_elements[temp_url_elements.length - 2];
+  					var provider_uuid = temp_url_elements[temp_url_elements.length - 1];
+  					
+  					//// check for existing referral session, create if doesn't exist
+  					var sessionUUID = req.cookies['_25c_referrer'];
+  					if (sessionUUID) {
+  					  
+  					} else {
+  					  sessionUUID = "referrer:" + uuid.v1().replace('-', '');
+  					}  					
+  					//// update cookie, so that maxAge gets reset each time
+  					var options = {
+					    maxAge: 86400000,
+					  };
+					  if (config['host'] != 'localhost') {
+					    options['domain'] = '.' + config['host'];
+					  }
+					  res.cookie('_25c_referrer', sessionUUID, options)
+  					//// update referrer info
+  					var value = JSON.stringify({ 'url': temp_url, 'referrer_user_uuid': referrer_user_uuid, 'provider_uuid': provider_uuid });
+  					redisApiClient.set(sessionUUID, value);
+  					redisApiClient.expire(sessionUUID, 86400);
+  					
             res.redirect(temp_url, 301);
         }
     }, true);
