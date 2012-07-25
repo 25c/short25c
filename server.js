@@ -294,10 +294,7 @@ app.all('*', function (req, res) {
 });
 
 
-
-//if(config.dotcloud) {
-//    app.listen(8080);
-//} else {
-    app.listen(config.port, config.host);
-    console.log('Running in ' + (process.env.NODE_ENV || 'development') + ' mode @ ' + config.url);
-//}
+var port = process.env.PORT || 5000;
+app.listen(port, function() {
+  console.log("Listening on " + port);
+});
