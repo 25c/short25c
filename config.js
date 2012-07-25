@@ -2,7 +2,7 @@ var url = require('url');
 var redisURL;
 var redisWebURL;
 if (process.env.REDISTOGO_SHORT_URL) {
-	redisURL = url.parse(process.env.REDISTOGO_URL);
+	redisURL = url.parse(process.env.REDISTOGO_SHORT_URL);
 } else {
 	redisURL = url.parse('http://user:pass@localhost:6379');
 }
