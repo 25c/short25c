@@ -12,9 +12,9 @@ var config = require('./lib/get-config'),
 	
 var uuid = require('node-uuid');
 var redis = require('redis');
-var redisApiClient = redis.createClient(config['redis-api'].port, config['redis-api'].host);
-if (config['redis-api'].pass) {
-  redisApiClient.auth(config.pass);
+var redisWebClient = redis.createClient(config['redis-web'].port, config['redis-web'].host);
+if (config['redis-web'].pass) {
+  redisWebClient.auth(config.pass);
 }
 
 
@@ -280,8 +280,8 @@ app.all(/^\/(\w+)$/, function (req, res){
 					  res.cookie('_25c_referrer', sessionUUID, options)
   					//// update referrer info
   					var value = JSON.stringify({ 'url': temp_url, 'referrer_user_uuid': referrer_user_uuid, 'provider_uuid': provider_uuid });
-  					redisApiClient.set(sessionUUID, value);
-  					redisApiClient.expire(sessionUUID, 86400);
+  					redisWebClient.set(sessionUUID, value);
+  					redisWebClient.expire(sessionUUID, 86400);
   					
             res.redirect(temp_url, 301);
         }

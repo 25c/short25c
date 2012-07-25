@@ -1,15 +1,15 @@
 var url = require('url');
 var redisURL;
-var redisApiURL;
+var redisWebURL;
 if (process.env.REDISTOGO_SHORT_URL) {
 	redisURL = url.parse(process.env.REDISTOGO_URL);
 } else {
 	redisURL = url.parse('http://user:pass@localhost:6379');
 }
-if (process.env.REDISTOGO_API_URL) {
-	redisApiURL = url.parse(process.env.REDISTOGO_API_URL);
+if (process.env.REDISTOGO_WEB_URL) {
+	redisWebURL = url.parse(process.env.REDISTOGO_WEB_URL);
 } else {
-	redisApiURL = url.parse('http://user:pass@localhost:6379');
+	redisWebURL = url.parse('http://user:pass@localhost:6379');
 }
 		
 var settings = {
@@ -25,7 +25,7 @@ var settings = {
       'port' : 6379,
       'pass' : false
     },
-    'redis-api': {
+    'redis-web': {
       'host' : 'localhost',
       'port' : 6379,
       'pass' : false
@@ -43,7 +43,7 @@ var settings = {
       'port' : 6379,
       'pass' : false
     },
-    'redis-api': {
+    'redis-web': {
       'host' : 'localhost',
       'port' : 6379,
       'pass' : false
@@ -61,10 +61,10 @@ var settings = {
       'port' : redisURL.port,
       'pass' : redisURL.auth.split(":")[1]
     },
-    'redis-api': {
-      'host' : redisApiURL.hostname,
-      'port' : redisApiURL.port,
-      'pass' : redisApiURL.auth.split(":")[1]
+    'redis-web': {
+      'host' : redisWebURL.hostname,
+      'port' : redisWebURL.port,
+      'pass' : redisWebURL.auth.split(":")[1]
     }
   },
 };
