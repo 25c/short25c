@@ -50,11 +50,11 @@ var settings = {
     }
   },
   production: {
-    'host' : 'plus25c.com',
+    'host' : '25c.com',
     'port': 80,
     'sessionSecret': 'sessionSecret', // Session salt
-    'url': 'http://plus25c.com', // Without trailing slash /
-    'url-web': 'https://www.plus25c.com',
+    'url': 'http://25c.com', // Without trailing slash /
+    'url-web': 'https://www.25c.com',
     'dotcloud' : false, // Use dotcloud environment
     'redis': {
       'host' : redisURL.hostname,
