@@ -49,6 +49,24 @@ var settings = {
       'pass' : false
     }
   },
+  staging: {
+    'host' : 'plus25c.com',
+    'port': 80,
+    'sessionSecret': 'sessionSecret', // Session salt
+    'url': 'http://plus25c.com', // Without trailing slash /
+    'url-web': 'https://www.plus25c.com',
+    'dotcloud' : false, // Use dotcloud environment
+    'redis': {
+      'host' : redisURL.hostname,
+      'port' : redisURL.port,
+      'pass' : redisURL.auth.split(":")[1]
+    },
+    'redis-web': {
+      'host' : redisWebURL.hostname,
+      'port' : redisWebURL.port,
+      'pass' : redisWebURL.auth.split(":")[1]
+    }
+  },
   production: {
     'host' : '25c.com',
     'port': 80,
@@ -66,7 +84,7 @@ var settings = {
       'port' : redisWebURL.port,
       'pass' : redisWebURL.auth.split(":")[1]
     }
-  },
+  }
 };
 
 module.exports = settings[process.env.NODE_ENV || 'development'];
